@@ -43,6 +43,17 @@
     dest: "{{ postgres_data_dir + '/10/data/' }}"
   when: upgrade_postgres | bool
 
+- name: Ensure {{postgres_data_dir}}/10 dir exists
+  file: path={{postgres_data_dir}}/10 state=directory
+
+- name: Ensure {{postgres_data_dir}}/10/data dir exists
+  file: path={{postgres_data_dir}}/10/data state=directory
+
+- name: Install new pg_hba.conf
+  copy:
+    src: "{{ postgres_data_dir + '/pg_hba.site.conf' }}"
+    dest: "{{ postgres_data_dir + '/10/data/pg_hba.conf' }}"
+
 - name: Remove old data directory
   file:
     path: "{{ postgres_data_dir + '/pgdata' }}"
